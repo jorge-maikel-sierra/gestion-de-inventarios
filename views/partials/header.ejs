@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ──── NAVBAR ──── -->
+  <header class="navbar">
+    <div class="navbar-brand">
+      <a href="/">🎸 MusicStore Pro</a>
+    </div>
+    <nav class="navbar-nav">
+      <a href="/categories" class="nav-link">Categorías</a>
+      <a href="/items/new" class="nav-link btn-nav-primary">+ Nuevo Producto</a>
+    </nav>
+  </header>
+
+  <!-- ──── FLASH MESSAGES ──── -->
+  <% if (locals.success_msg && success_msg) { %>
+    <div class="container">
+      <div class="alert alert-success">
+        <span>✅</span> <%= success_msg %>
+      </div>
+    </div>
+  <% } %>
+  <% if (locals.error_msg && error_msg) { %>
+    <div class="container">
+      <div class="alert alert-danger">
+        <span>❌</span> <%= error_msg %>
+      </div>
+    </div>
+  <% } %>
+
+  <!-- ──── CONTENIDO PRINCIPAL ──── -->
+  <main class="container main-content">

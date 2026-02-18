@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<!-- ──── PAGE HEADER ──── -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">🎵 Categorías</h1>
+    <p class="page-subtitle">Administra las familias de instrumentos de tu tienda</p>
+  </div>
+  <a href="/categories/new" class="btn btn-primary">+ Nueva Categoría</a>
+</div>
+
+<!-- ──── GRID DE CATEGORÍAS ──── -->
+<% if (categories.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-icon">📦</div>
+    <h3>No hay categorías todavía</h3>
+    <p>Comienza creando la primera categoría para tu tienda.</p>
+    <a href="/categories/new" class="btn btn-primary">Crear primera categoría</a>
+  </div>
+<% } else { %>
+  <div class="card-grid">
+    <% categories.forEach(category => { %>
+      <div class="card card-category">
+        <div class="card-body">
+          <h2 class="card-title">
+            <a href="/categories/<%= category.id %>"><%= category.name %></a>
+          </h2>
+          <p class="card-text"><%= category.description || 'Sin descripción.' %></p>
+          <div class="badge-count">
+            <span class="badge"><%= category.item_count %> producto<%= category.item_count !== 1 ? 's' : '' %></span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <a href="/categories/<%= category.id %>" class="btn btn-sm btn-outline">Ver items</a>
+          <a href="/categories/<%= category.id %>/edit" class="btn btn-sm btn-secondary">Editar</a>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>

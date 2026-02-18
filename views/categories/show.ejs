@@ -1,0 +1,116 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <div>
+    <nav class="breadcrumb">
+      <a href="/categories">Categorías</a>
+      <span>›</span>
+      <span><%= category.name %></span>
+    </nav>
+    <h1 class="page-title">🎸 <%= category.name %></h1>
+    <p class="page-subtitle"><%= category.description || 'Sin descripción.' %></p>
+  </div>
+  <div class="btn-group">
+    <a href="/categories/<%= category.id %>/edit" class="btn btn-secondary">✏️ Editar</a>
+    <a href="/items/new?category_id=<%= category.id %>" class="btn btn-primary">+ Nuevo Producto</a>
+  </div>
+</div>
+
+<!-- ──── STATS ──── -->
+<div class="stats-row">
+  <div class="stat-card">
+    <span class="stat-number"><%= category.item_count %></span>
+    <span class="stat-label">Productos</span>
+  </div>
+</div>
+
+<!-- ──── TABLA DE ITEMS ──── -->
+<div class="card">
+  <div class="card-header">
+    <h2>Productos en esta categoría</h2>
+    <a href="/items/new?category_id=<%= category.id %>" class="btn btn-sm btn-primary">+ Agregar</a>
+  </div>
+  <% if (items.length === 0) { %>
+    <div class="empty-state-inline">
+      <p>📭 No hay productos en esta categoría todavía.</p>
+      <a href="/items/new?category_id=<%= category.id %>" class="btn btn-primary">Agregar primer producto</a>
+    </div>
+  <% } else { %>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(item => { %>
+            <tr>
+              <td>
+                <a href="/items/<%= item.id %>" class="item-link"><%= item.name %></a>
+                <% if (item.description) { %>
+                  <small class="item-desc"><%= item.description.substring(0, 60) %><%= item.description.length > 60 ? '...' : '' %></small>
+                <% } %>
+              </td>
+              <td class="price-cell">$<%= parseFloat(item.price).toFixed(2) %></td>
+              <td>
+                <span class="stock-badge <%= item.quantity === 0 ? 'stock-empty' : item.quantity < 5 ? 'stock-low' : 'stock-ok' %>">
+                  <%= item.quantity %>
+                </span>
+              </td>
+              <td class="actions-cell">
+                <a href="/items/<%= item.id %>" class="btn btn-xs btn-outline">Ver</a>
+                <a href="/items/<%= item.id %>/edit" class="btn btn-xs btn-secondary">Editar</a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+</div>
+
+<!-- ──── ZONA DE PELIGRO ──── -->
+<div class="danger-zone">
+  <h3>⚠️ Zona de Peligro</h3>
+  <p>Eliminar esta categoría es una acción permanente. Solo es posible si no tiene productos asociados.</p>
+
+  <button class="btn btn-danger" onclick="document.getElementById('delete-modal').style.display='flex'">
+    🗑️ Eliminar Categoría
+  </button>
+</div>
+
+<!-- ──── MODAL ELIMINAR ──── -->
+<div id="delete-modal" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <h3>🗑️ Confirmar eliminación</h3>
+    <p>Estás a punto de eliminar la categoría <strong>"<%= category.name %>"</strong>.</p>
+    <p class="modal-warning">⚠️ Esta acción no se puede deshacer. Requiere contraseña de administrador.</p>
+
+    <form action="/categories/<%= category.id %>?_method=DELETE" method="POST">
+      <div class="form-group">
+        <label class="form-label" for="delete-admin-pass">Contraseña de Administrador</label>
+        <input
+          type="password"
+          id="delete-admin-pass"
+          name="admin_password"
+          class="form-control"
+          placeholder="Ingresa la contraseña..."
+          required
+          autocomplete="off"
+        />
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" onclick="document.getElementById('delete-modal').style.display='none'">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

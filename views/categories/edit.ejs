@@ -1,0 +1,93 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <div>
+    <nav class="breadcrumb">
+      <a href="/categories">Categorías</a>
+      <span>›</span>
+      <a href="/categories/<%= category.id %>"><%= category.name %></a>
+      <span>›</span>
+      <span>Editar</span>
+    </nav>
+    <h1 class="page-title">Editar Categoría</h1>
+  </div>
+</div>
+
+<!-- ──── ERRORES ──── -->
+<% if (errors && errors.length > 0) { %>
+  <div class="alert alert-danger">
+    <strong>Por favor corrige los siguientes errores:</strong>
+    <ul class="error-list">
+      <% errors.forEach(err => { %>
+        <li><%= err.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<!-- ──── FORMULARIO ──── -->
+<div class="form-card">
+  <form action="/categories/<%= category.id %>?_method=PUT" method="POST" novalidate>
+
+    <div class="form-group">
+      <label class="form-label" for="name">
+        Nombre <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        class="form-control <%= errors && errors.some(e => e.path === 'name') ? 'is-invalid' : '' %>"
+        value="<%= category.name || '' %>"
+        placeholder="Nombre de la categoría"
+        required
+        maxlength="100"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Descripción</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control"
+        rows="3"
+        placeholder="Describe esta categoría..."
+        maxlength="500"
+      ><%= category.description || '' %></textarea>
+    </div>
+
+    <!-- ──── CONTRASEÑA ADMIN ──── -->
+    <div class="admin-password-section">
+      <div class="admin-password-header">
+        <span>🔒</span>
+        <div>
+          <strong>Confirmación de Administrador</strong>
+          <p>Para guardar cambios debes ingresar la contraseña de administrador.</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="admin_password">
+          Contraseña de Administrador <span class="required">*</span>
+        </label>
+        <input
+          type="password"
+          id="admin_password"
+          name="admin_password"
+          class="form-control"
+          placeholder="Contraseña de admin..."
+          required
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="/categories/<%= category.id %>" class="btn btn-outline">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
+
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

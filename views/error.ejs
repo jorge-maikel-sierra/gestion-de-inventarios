@@ -1,0 +1,10 @@
+<%- include('./partials/header') %>
+
+<div class="error-page">
+  <div class="error-code">500</div>
+  <h1>Error del servidor</h1>
+  <p><%= message || 'Ocurrió un error inesperado. Por favor intenta nuevamente.' %></p>
+  <a href="/" class="btn btn-primary">← Volver al inicio</a>
+</div>
+
+<%- include('./partials/footer') %>

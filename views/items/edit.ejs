@@ -1,0 +1,150 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <div>
+    <nav class="breadcrumb">
+      <a href="/categories">Categorías</a>
+      <span>›</span>
+      <a href="/categories/<%= item.category_id %>"><%= item.category_name %></a>
+      <span>›</span>
+      <a href="/items/<%= item.id %>"><%= item.name %></a>
+      <span>›</span>
+      <span>Editar</span>
+    </nav>
+    <h1 class="page-title">Editar Producto</h1>
+  </div>
+</div>
+
+<!-- ──── ERRORES ──── -->
+<% if (errors && errors.length > 0) { %>
+  <div class="alert alert-danger">
+    <strong>Por favor corrige los siguientes errores:</strong>
+    <ul class="error-list">
+      <% errors.forEach(err => { %>
+        <li><%= err.msg %></li>
+      <% }) %>
+    </ul>
+  </div>
+<% } %>
+
+<!-- ──── FORMULARIO ──── -->
+<div class="form-card">
+  <form action="/items/<%= item.id %>?_method=PUT" method="POST" novalidate>
+
+    <div class="form-group">
+      <label class="form-label" for="name">
+        Nombre del Producto <span class="required">*</span>
+      </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        class="form-control <%= errors && errors.some(e => e.path === 'name') ? 'is-invalid' : '' %>"
+        value="<%= item.name || '' %>"
+        placeholder="Nombre del producto"
+        required
+        maxlength="200"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Descripción</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-control"
+        rows="3"
+        placeholder="Descripción del producto..."
+        maxlength="1000"
+      ><%= item.description || '' %></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="price">
+          Precio (USD) <span class="required">*</span>
+        </label>
+        <div class="input-prefix">
+          <span class="prefix-symbol">$</span>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            class="form-control <%= errors && errors.some(e => e.path === 'price') ? 'is-invalid' : '' %>"
+            value="<%= item.price || '' %>"
+            step="0.01"
+            min="0.01"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="quantity">
+          Cantidad en Stock <span class="required">*</span>
+        </label>
+        <input
+          type="number"
+          id="quantity"
+          name="quantity"
+          class="form-control <%= errors && errors.some(e => e.path === 'quantity') ? 'is-invalid' : '' %>"
+          value="<%= item.quantity !== undefined ? item.quantity : '' %>"
+          min="0"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="category_id">
+        Categoría <span class="required">*</span>
+      </label>
+      <select
+        id="category_id"
+        name="category_id"
+        class="form-control form-select"
+        required
+      >
+        <option value="">— Selecciona una categoría —</option>
+        <% categories.forEach(cat => { %>
+          <option value="<%= cat.id %>" <%= String(item.category_id) === String(cat.id) ? 'selected' : '' %>>
+            <%= cat.name %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <!-- ──── CONTRASEÑA ADMIN ──── -->
+    <div class="admin-password-section">
+      <div class="admin-password-header">
+        <span>🔒</span>
+        <div>
+          <strong>Confirmación de Administrador</strong>
+          <p>Para guardar cambios debes ingresar la contraseña de administrador.</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="admin_password">
+          Contraseña de Administrador <span class="required">*</span>
+        </label>
+        <input
+          type="password"
+          id="admin_password"
+          name="admin_password"
+          class="form-control"
+          placeholder="Contraseña de admin..."
+          required
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="/items/<%= item.id %>" class="btn btn-outline">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+    </div>
+
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

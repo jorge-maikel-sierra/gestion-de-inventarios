@@ -1,0 +1,59 @@
+<%- include('../partials/header') %>
+
+<div class="page-header">
+  <div>
+    <nav class="breadcrumb">
+      <a href="/categories">Categorías</a>
+      <span>›</span>
+      <a href="/categories/<%= category.id %>"><%= category.name %></a>
+      <span>›</span>
+      <span>Todos los productos</span>
+    </nav>
+    <h1 class="page-title">Productos: <%= category.name %></h1>
+    <p class="page-subtitle"><%= items.length %> producto<%= items.length !== 1 ? 's' : '' %> encontrado<%= items.length !== 1 ? 's' : '' %></p>
+  </div>
+  <a href="/items/new?category_id=<%= category.id %>" class="btn btn-primary">+ Nuevo Producto</a>
+</div>
+
+<% if (items.length === 0) { %>
+  <div class="empty-state">
+    <div class="empty-icon">🎵</div>
+    <h3>No hay productos en esta categoría</h3>
+    <p>Agrega el primer producto a <strong><%= category.name %></strong>.</p>
+    <a href="/items/new?category_id=<%= category.id %>" class="btn btn-primary">Agregar producto</a>
+  </div>
+<% } else { %>
+  <div class="table-responsive card">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% items.forEach(item => { %>
+          <tr>
+            <td><a href="/items/<%= item.id %>" class="item-link"><%= item.name %></a></td>
+            <td class="desc-cell"><%= item.description ? item.description.substring(0, 80) + (item.description.length > 80 ? '...' : '') : '—' %></td>
+            <td class="price-cell">$<%= parseFloat(item.price).toFixed(2) %></td>
+            <td>
+              <span class="stock-badge <%= item.quantity === 0 ? 'stock-empty' : item.quantity < 5 ? 'stock-low' : 'stock-ok' %>">
+                <%= item.quantity %>
+              </span>
+            </td>
+            <td class="actions-cell">
+              <a href="/items/<%= item.id %>" class="btn btn-xs btn-outline">Ver</a>
+              <a href="/items/<%= item.id %>/edit" class="btn btn-xs btn-secondary">Editar</a>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+<% } %>
+
+<%- include('../partials/footer') %>
