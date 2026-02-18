@@ -143,23 +143,38 @@ npm install
 
 Crea o edita el archivo `.env` en la raíz del proyecto:
 
+### Opción A — Base de datos local (PostgreSQL)
+
 ```env
-# Servidor
 PORT=3000
 NODE_ENV=development
 
-# PostgreSQL
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=musicstore_pro
-DB_USER=tu_usuario_postgres   # En macOS suele ser tu nombre de usuario del sistema
-DB_PASSWORD=                  # Dejar vacío si no tienes contraseña local
+DB_USER=tu_usuario_postgres
+DB_PASSWORD=
 
-# Seguridad
 ADMIN_PASSWORD=super123
 ```
 
 > **macOS:** si instalaste PostgreSQL con Homebrew o Postgres.app, el usuario suele ser el mismo que el de tu sesión de sistema (`whoami`), no `postgres`.
+
+### Opción B — Neon (PostgreSQL serverless en la nube)
+
+```env
+PORT=3000
+NODE_ENV=development
+
+DATABASE_URL=postgresql://<user>:<password>@<host>/neondb?sslmode=verify-full&channel_binding=require
+DB_SSL=true
+
+ADMIN_PASSWORD=super123
+```
+
+> Obtén tu `DATABASE_URL` desde el [dashboard de Neon](https://console.neon.tech) → tu proyecto → **Connection string**.
+
+La app detecta automáticamente `DATABASE_URL` y la usa con SSL habilitado. Si no está definida, usa las variables `DB_*` individuales.
 
 ---
 
@@ -167,12 +182,15 @@ ADMIN_PASSWORD=super123
 
 ### Crear la base de datos y aplicar el esquema
 
+**Local:**
 ```bash
-# Crear la base de datos
 psql postgres -c "CREATE DATABASE musicstore_pro;"
-
-# Aplicar el esquema (tablas, triggers e índices)
 psql musicstore_pro -f db/schema.sql
+```
+
+**Neon:**
+```bash
+psql "<tu DATABASE_URL>" -f db/schema.sql
 ```
 
 ### Cargar datos de prueba
