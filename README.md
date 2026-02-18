@@ -1,152 +1,266 @@
-# 🎸 MusicStore Pro — Gestión de Inventario
+<div align="center">
 
-Aplicación web completa de gestión de inventario para una tienda de instrumentos musicales. Construida con **Node.js + Express + PostgreSQL + EJS**, arquitectura **MVC**.
+# 🎸 MusicStore Pro
 
----
+### Sistema de Gestión de Inventario
 
-## 🚀 Instalación y Configuración
+**Aplicación web full-stack** para administrar el inventario de una tienda de instrumentos musicales.  
+Construida con **Node.js · Express · PostgreSQL · EJS** bajo arquitectura **MVC**.
 
-### 1. Requisitos previos
-- Node.js ≥ 18
-- PostgreSQL ≥ 14
+![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-339933?style=flat-square&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-5.x-000000?style=flat-square&logo=express&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%3E%3D14-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![EJS](https://img.shields.io/badge/EJS-4.x-B4CA65?style=flat-square)
+![License](https://img.shields.io/badge/license-ISC-blue?style=flat-square)
 
-### 2. Instalar dependencias
-```bash
-npm install
-```
-
-### 3. Configurar variables de entorno
-Edita el archivo `.env` con tus credenciales:
-```env
-PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=musicstore_pro
-DB_USER=postgres
-DB_PASSWORD=tu_password
-ADMIN_PASSWORD=super123
-```
-
-### 4. Crear base de datos en PostgreSQL
-```bash
-psql -U postgres -c "CREATE DATABASE musicstore_pro;"
-psql -U postgres -d musicstore_pro -f db/schema.sql
-```
-
-### 5. Cargar datos de prueba
-```bash
-npm run seed
-```
-
-### 6. Iniciar servidor
-```bash
-npm start          # Producción
-npm run dev        # Desarrollo (con auto-reload)
-```
-
-Visita: **http://localhost:3000**
+</div>
 
 ---
 
-## 🗂️ Estructura del Proyecto
+## 📋 Tabla de Contenidos
 
-```
-/inventory-app
- ├── app.js                  # Entrada principal
- ├── package.json
- ├── .env                    # Variables de entorno
- ├── .gitignore
- ├── /routes
- │    ├── categories.js      # Rutas REST de categorías
- │    └── items.js           # Rutas REST de items
- ├── /controllers
- │    ├── categoryController.js
- │    └── itemController.js
- ├── /models
- │    ├── Category.js        # Consultas SQL de categorías
- │    └── Item.js            # Consultas SQL de items
- ├── /views
- │    ├── layout.ejs         # Layout base (referencia)
- │    ├── 404.ejs
- │    ├── error.ejs
- │    ├── /partials
- │    │    ├── header.ejs
- │    │    └── footer.ejs
- │    ├── /categories
- │    │    ├── index.ejs
- │    │    ├── show.ejs
- │    │    ├── new.ejs
- │    │    └── edit.ejs
- │    └── /items
- │         ├── index.ejs
- │         ├── show.ejs
- │         ├── new.ejs
- │         └── edit.ejs
- ├── /public
- │    └── /css
- │         └── style.css
- └── /db
-      ├── pool.js            # Pool de conexiones pg
-      ├── schema.sql         # Esquema de tablas
-      └── seed.js            # Datos ficticios
-```
+- [Vista general](#-vista-general)
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologías](#-tecnologías)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Instalación](#-instalación)
+- [Configuración](#-configuración)
+- [Base de datos](#-base-de-datos)
+- [Scripts disponibles](#-scripts-disponibles)
+- [Rutas de la API](#-rutas-de-la-api)
+- [Seguridad](#-seguridad)
 
 ---
 
-## 📋 Rutas disponibles
+## 🎯 Vista General
 
-### Categorías
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| GET | `/categories` | Lista todas las categorías |
-| GET | `/categories/new` | Formulario crear categoría |
-| POST | `/categories` | Crear categoría |
-| GET | `/categories/:id` | Ver categoría + sus items |
-| GET | `/categories/:id/items` | Lista items de una categoría |
-| GET | `/categories/:id/edit` | Formulario editar categoría |
-| PUT | `/categories/:id` | Actualizar categoría 🔒 |
-| DELETE | `/categories/:id` | Eliminar categoría 🔒 |
-
-### Items / Productos
-| Método | Ruta | Descripción |
-|--------|------|-------------|
-| GET | `/items/new` | Formulario crear producto |
-| POST | `/items` | Crear producto |
-| GET | `/items/:id` | Ver detalle de producto |
-| GET | `/items/:id/edit` | Formulario editar producto |
-| PUT | `/items/:id` | Actualizar producto 🔒 |
-| DELETE | `/items/:id` | Eliminar producto 🔒 |
-
-> 🔒 = Requiere contraseña de administrador (`ADMIN_PASSWORD` en `.env`)
+MusicStore Pro es un sistema CRUD completo que permite a los administradores de una tienda de instrumentos musicales gestionar su catálogo de productos organizado por categorías. Incluye protección de acciones destructivas con contraseña de administrador, validaciones en servidor y una interfaz web limpia y responsiva.
 
 ---
 
-## 🔒 Seguridad
+## ✨ Funcionalidades
 
-- **Acciones destructivas** (UPDATE/DELETE) requieren la contraseña `ADMIN_PASSWORD`.
-- Las **categorías con items** no pueden ser eliminadas (protección por FK + validación extra).
-- Validaciones con `express-validator` en servidor para todos los formularios.
-
----
-
-## 🌱 Datos Seed
-
-El script `db/seed.js` inserta:
-- **6 categorías**: Guitarras, Teclados y Pianos, Batería y Percusión, Vientos, Cuerdas, Accesorios
-- **25 productos** con precios, descripciones y stock reales
+| Módulo | Funcionalidades |
+|--------|----------------|
+| **Categorías** | Crear, listar, ver, editar y eliminar categorías de instrumentos |
+| **Productos** | CRUD completo con precio, stock y categoría asociada |
+| **Protección admin** | UPDATE y DELETE requieren contraseña de administrador |
+| **Validaciones** | Validaciones en servidor con mensajes de error descriptivos |
+| **Protección FK** | No se puede eliminar una categoría que tenga productos asociados |
+| **Stock visual** | Indicadores de stock: normal 🟢 / bajo 🟡 / agotado 🔴 |
+| **Seed data** | 6 categorías y 25 productos reales pre-cargados |
+| **Responsivo** | Diseño adaptable a móviles y escritorio |
 
 ---
 
 ## 🛠️ Tecnologías
 
-| Tecnología | Uso |
-|-----------|-----|
-| Node.js | Runtime |
-| Express 4 | Framework web |
-| PostgreSQL | Base de datos |
-| `pg` | Driver PostgreSQL |
-| EJS | Motor de templates |
-| `method-override` | PUT/DELETE desde HTML forms |
-| `express-validator` | Validaciones |
-| `dotenv` | Variables de entorno |
-# gestion-de-inventarios
+| Tecnología | Versión | Uso |
+|-----------|---------|-----|
+| [Node.js](https://nodejs.org) | ≥ 18 | Runtime de JavaScript |
+| [Express](https://expressjs.com) | 5.x | Framework web |
+| [PostgreSQL](https://www.postgresql.org) | ≥ 14 | Base de datos relacional |
+| [pg](https://node-postgres.com) | 8.x | Driver PostgreSQL para Node |
+| [EJS](https://ejs.co) | 4.x | Motor de plantillas HTML |
+| [method-override](https://github.com/expressjs/method-override) | 3.x | Soporte PUT/DELETE en formularios HTML |
+| [express-validator](https://express-validator.github.io) | 7.x | Validaciones en servidor |
+| [dotenv](https://github.com/motdotla/dotenv) | 17.x | Manejo de variables de entorno |
+
+---
+
+## 📁 Estructura del Proyecto
+
+```
+gestion-de-invetarios/
+ ├── app.js                        # Punto de entrada · configuración Express
+ ├── package.json
+ ├── .env                          # Variables de entorno (no versionar)
+ ├── .gitignore
+ ├── README.md
+ │
+ ├── routes/
+ │    ├── categories.js            # Rutas REST de categorías + validaciones
+ │    └── items.js                 # Rutas REST de productos + validaciones
+ │
+ ├── controllers/
+ │    ├── categoryController.js    # Lógica CRUD de categorías
+ │    └── itemController.js        # Lógica CRUD de productos
+ │
+ ├── models/
+ │    ├── Category.js              # Consultas SQL de categorías (pg)
+ │    └── Item.js                  # Consultas SQL de productos (pg)
+ │
+ ├── views/
+ │    ├── partials/
+ │    │    ├── header.ejs          # Navbar + flash messages
+ │    │    └── footer.ejs
+ │    ├── categories/
+ │    │    ├── index.ejs           # Grid de categorías
+ │    │    ├── show.ejs            # Detalle + tabla de items
+ │    │    ├── new.ejs             # Formulario crear
+ │    │    └── edit.ejs            # Formulario editar + contraseña admin
+ │    ├── items/
+ │    │    ├── index.ejs           # Lista de productos por categoría
+ │    │    ├── show.ejs            # Detalle de producto
+ │    │    ├── new.ejs             # Formulario crear
+ │    │    └── edit.ejs            # Formulario editar + contraseña admin
+ │    ├── 404.ejs
+ │    └── error.ejs
+ │
+ ├── public/
+ │    └── css/
+ │         └── style.css           # Estilos globales (CSS variables + responsive)
+ │
+ └── db/
+      ├── pool.js                  # Pool de conexiones PostgreSQL
+      ├── schema.sql               # DDL: tablas, triggers, índices
+      └── seed.js                  # Datos ficticios de instrumentos musicales
+```
+
+---
+
+## 🚀 Instalación
+
+### Requisitos previos
+
+- **Node.js** ≥ 18 → [descargar](https://nodejs.org)
+- **PostgreSQL** ≥ 14 → [descargar](https://www.postgresql.org/download/)
+
+### Pasos
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/tu-usuario/gestion-de-invetarios.git
+cd gestion-de-invetarios
+
+# 2. Instalar dependencias
+npm install
+```
+
+---
+
+## ⚙️ Configuración
+
+Crea o edita el archivo `.env` en la raíz del proyecto:
+
+```env
+# Servidor
+PORT=3000
+NODE_ENV=development
+
+# PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=musicstore_pro
+DB_USER=tu_usuario_postgres   # En macOS suele ser tu nombre de usuario del sistema
+DB_PASSWORD=                  # Dejar vacío si no tienes contraseña local
+
+# Seguridad
+ADMIN_PASSWORD=super123
+```
+
+> **macOS:** si instalaste PostgreSQL con Homebrew o Postgres.app, el usuario suele ser el mismo que el de tu sesión de sistema (`whoami`), no `postgres`.
+
+---
+
+## 🗄️ Base de Datos
+
+### Crear la base de datos y aplicar el esquema
+
+```bash
+# Crear la base de datos
+psql postgres -c "CREATE DATABASE musicstore_pro;"
+
+# Aplicar el esquema (tablas, triggers e índices)
+psql musicstore_pro -f db/schema.sql
+```
+
+### Cargar datos de prueba
+
+```bash
+npm run seed
+```
+
+Esto inserta:
+- **6 categorías**: Guitarras, Teclados y Pianos, Batería y Percusión, Vientos, Cuerdas, Accesorios
+- **25 productos** con nombres, descripciones, precios y stock reales
+
+### Esquema de tablas
+
+```sql
+categories
+  id          SERIAL PRIMARY KEY
+  name        VARCHAR(100) NOT NULL UNIQUE
+  description TEXT
+  created_at  TIMESTAMP
+  updated_at  TIMESTAMP  -- actualizado automáticamente por trigger
+
+items
+  id          SERIAL PRIMARY KEY
+  name        VARCHAR(200) NOT NULL
+  description TEXT
+  price       NUMERIC(10,2) NOT NULL  CHECK (price > 0)
+  quantity    INTEGER NOT NULL        CHECK (quantity >= 0)
+  category_id INTEGER NOT NULL        REFERENCES categories(id) ON DELETE RESTRICT
+  created_at  TIMESTAMP
+  updated_at  TIMESTAMP  -- actualizado automáticamente por trigger
+```
+
+---
+
+## 📜 Scripts Disponibles
+
+```bash
+npm start        # Inicia el servidor en modo producción
+npm run dev      # Inicia con auto-reload (node --watch)
+npm run seed     # Limpia e inserta datos de prueba
+```
+
+---
+
+## 🗺️ Rutas de la API
+
+### Categorías
+
+| Método | Ruta | Descripción | 🔒 |
+|--------|------|-------------|:--:|
+| `GET` | `/categories` | Listado de todas las categorías | |
+| `GET` | `/categories/new` | Formulario nueva categoría | |
+| `POST` | `/categories` | Crear categoría | |
+| `GET` | `/categories/:id` | Detalle de categoría + sus productos | |
+| `GET` | `/categories/:id/items` | Lista de productos de una categoría | |
+| `GET` | `/categories/:id/edit` | Formulario editar categoría | |
+| `PUT` | `/categories/:id` | Actualizar categoría | ✅ |
+| `DELETE` | `/categories/:id` | Eliminar categoría | ✅ |
+
+### Productos
+
+| Método | Ruta | Descripción | 🔒 |
+|--------|------|-------------|:--:|
+| `GET` | `/items/new` | Formulario nuevo producto | |
+| `POST` | `/items` | Crear producto | |
+| `GET` | `/items/:id` | Detalle de producto | |
+| `GET` | `/items/:id/edit` | Formulario editar producto | |
+| `PUT` | `/items/:id` | Actualizar producto | ✅ |
+| `DELETE` | `/items/:id` | Eliminar producto | ✅ |
+
+> 🔒 Requiere ingresar `ADMIN_PASSWORD` definida en `.env`
+
+---
+
+## 🔒 Seguridad
+
+- **Contraseña de administrador:** todas las operaciones de actualización y eliminación solicitan la contraseña `ADMIN_PASSWORD` definida en `.env`. Si es incorrecta, la acción no se ejecuta y se muestra un error.
+- **Protección de integridad referencial:** una categoría no puede eliminarse si tiene productos asociados. El sistema lo bloquea a nivel de aplicación y a nivel de base de datos (`FK ON DELETE RESTRICT`).
+- **Validaciones en servidor:** todos los formularios validan con `express-validator` antes de acceder a la base de datos:
+  - Categoría: `name` obligatorio, mínimo 3 caracteres, máximo 100
+  - Producto: `name` obligatorio, `price > 0`, `quantity >= 0`, `category_id` válido
+- **Sin exposición de credenciales:** el archivo `.env` está incluido en `.gitignore`.
+
+---
+
+<div align="center">
+
+Hecho con ❤️ para **MusicStore Pro** &nbsp;·&nbsp; 2026
+
+</div>
